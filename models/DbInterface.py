@@ -11,12 +11,6 @@ load_dotenv()
 app = Flask(__name__)
 
 
-app.config['MYSQL_HOST'] = 'loca34lhost'
-app.config['MYSQL_USER'] = 'root23423'
-app.config['MYSQL_PASSWORD'] = 'Hell234234234oworld@123'
-app.config['MYSQL_DB'] = 'sipngo'
-
-
 db = mysql.connector.connect(
   host=os.getenv("DB_HOST"),
   user=os.getenv("DB_USER"),
