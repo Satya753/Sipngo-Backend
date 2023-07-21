@@ -11,9 +11,9 @@ load_dotenv()
 app = Flask(__name__)
 
 
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Helloworld@123'
+app.config['MYSQL_HOST'] = 'loca34lhost'
+app.config['MYSQL_USER'] = 'root23423'
+app.config['MYSQL_PASSWORD'] = 'Hell234234234oworld@123'
 app.config['MYSQL_DB'] = 'sipngo'
 
 
