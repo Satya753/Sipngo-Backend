@@ -34,6 +34,17 @@ def fetchCategories():
 
     return item
 
+@app.route("/home/category/<category_id>" , methods = ['GET'])
+def fetchItems(category_id):
+    items = models.getItems(category_id)
+    res = []
+
+    for item in items:
+        res.append([item.price , item.name])
+
+
+    return res
+
 
 
 
