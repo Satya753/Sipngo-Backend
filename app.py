@@ -4,8 +4,10 @@ import mysql.connector
 import sys
 from flask_cors import CORS
 sys.path.append('models/')
+sys.path.append('Utils/')
 from Category import Category
 from Models import Model
+from ImageProcessing import ByteImage 
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -29,18 +31,21 @@ def fetchCategories():
     d = models.getCategories()
     item = []
     for data in d:
-        item.append(data.getName())
-        print(data.getName())
+        item.append([data.getName() , data.getId()])
+
+    print(item)
 
     return item
 
-@app.route("/home/category/<category_id>" , methods = ['GET'])
-def fetchItems(category_id):
+@app.route("/home/category" , methods = ['GET'])
+def fetchItems():
+    category_id = request.args.get('id')
     items = models.getItems(category_id)
     res = []
 
     for item in items:
-        res.append([item.price , item.name])
+        byteimg = ByteImage(item.image_path)
+        res.append([item.price , item.name , byteimg.getBase64()])
 
 
     return res
