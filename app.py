@@ -1,5 +1,5 @@
 import os
-from flask import Flask , render_template , request , url_for , redirect
+from flask import Flask ,  render_template , request ,jsonify, url_for , redirect
 import mysql.connector
 import sys
 from flask_cors import CORS
@@ -45,10 +45,24 @@ def fetchItems():
 
     for item in items:
         byteimg = ByteImage(item.image_path)
-        res.append([item.price , item.name , byteimg.getBase64()])
+        res.append([item.price , item.name ,byteimg.getBase64() , item.id])
 
 
     return res
+
+
+@app.route("/home/add_order" , methods = ['POST'])
+def addOrder():
+    data = request.json
+    # Insert data into table 
+    print(data)
+    status = models.addOrder(data)
+
+    response  = {
+            'message':'Order placed successfully , Track with below order id',
+            'order_id':'1XE3'
+        }
+    return jsonify(response , 200)
 
 
 
