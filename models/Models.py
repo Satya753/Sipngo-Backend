@@ -21,7 +21,7 @@ class Model:
         category = []
 
         for row in rows:
-            item = Category(row[0] , row[1] , row[2])
+            item = Category(row[0] , row[1] , row[2] , row[3])
             print(item)
             category.append(item)
 

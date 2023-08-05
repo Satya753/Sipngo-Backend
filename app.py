@@ -8,8 +8,8 @@ sys.path.append('Utils/')
 from Category import Category
 from Models import Model
 from ImageProcessing import ByteImage 
-
 from dotenv import load_dotenv
+from mysql.connector import pooling
 load_dotenv()
 
 app = Flask(__name__)
@@ -22,16 +22,46 @@ db = mysql.connector.connect(
   database=os.getenv("DB_NAME")
 )
 
+connection_pool = pooling.MySQLConnectionPool(host = os.getenv("DB_HOST"),
+        user = os.getenv("DB_USER"),
+        password = os.getenv("DB_PASSWORD"),
+        database = os.getenv("DB_NAME"),
+        pool_name = "my_sql_pool",
+        pool_size = 5,
+        pool_reset_session = True
+        )
+
+app.config['MYSQL_HOST'] = os.getenv("DB_HOST")
+app.config['MYSQL_PORT'] = 3306
+app.config['MYSQL_USER'] = os.getenv("DB_USER")
+app.config['MYSQL_PASS'] = os.getenv("DB_PASSWORD")
+app.config['MYSQL_DB'] = os.getenv("DB_NAME") 
+app.config['MYSQL_POOL_NAME'] = 'mysql_pool'
+app.config['MYSQL_POOL_SIZE'] = 5
+app.config['MYSQL_AUTOCOMMIT'] = True
+
+#db = MySQLPool(app)
+
 
 models = Model(db)
 
 
+def getNewConnection(db):
+    conn = db.get_connection()
+    return conn 
+
 @app.route("/home")
 def fetchCategories():
+    conn = getNewConnection(connection_pool)
+    models = Model(conn)
     d = models.getCategories()
     item = []
     for data in d:
-        item.append([data.getName() , data.getId()])
+        if data.image==None:
+            data.image = 'static/items/download.jpeg'
+        byteimg = ByteImage(data.image)
+        item.append([data.getName() , data.getId() , byteimg.getBase64()])
+    conn.close()
 
     print(item)
 
@@ -68,7 +98,7 @@ def addOrder():
 
 
 if __name__=="__main__":
-    app.run()
+    app.run(host='0.0.0.0' , port=5000)
 
 
 
