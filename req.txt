@@ -1,0 +1,7 @@
+Flask==2.3.2
+Werkzeug==2.3.6
+mysql-connector
+mysql-connector-python
+flask-cors
+python-dotenv
+
