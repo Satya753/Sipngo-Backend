@@ -19,7 +19,7 @@ class Model:
         rows = cursor.fetchall()
 
         category = []
-
+        print(rows)
         for row in rows:
             item = Category(row[0] , row[1] , row[2] , row[3])
             print(item)
