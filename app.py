@@ -15,12 +15,6 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-db = mysql.connector.connect(
-  host=os.getenv("DB_HOST"),
-  user=os.getenv("DB_USER"),
-  password=os.getenv("DB_PASSWORD"),
-  database=os.getenv("DB_NAME")
-)
 
 connection_pool = pooling.MySQLConnectionPool(host = os.getenv("DB_HOST"),
         user = os.getenv("DB_USER"),
@@ -43,7 +37,6 @@ app.config['MYSQL_AUTOCOMMIT'] = True
 #db = MySQLPool(app)
 
 
-models = Model(db)
 
 
 def getNewConnection(db):
@@ -69,6 +62,8 @@ def fetchCategories():
 
 @app.route("/home/category" , methods = ['GET'])
 def fetchItems():
+    conn = getNewConnection(connection_pool)
+    models = Model(conn)
     category_id = request.args.get('id')
     items = models.getItems(category_id)
     res = []
@@ -77,13 +72,16 @@ def fetchItems():
         byteimg = ByteImage(item.image_path)
         res.append([item.price , item.name ,byteimg.getBase64() , item.id])
 
+    conn.close()
 
     return res
 
 
 @app.route("/home/add_order" , methods = ['POST'])
 def addOrder():
+    conn = getNewConnection(connection_pool)
     data = request.json
+    models = Model(conn)
     # Insert data into table 
     print(data)
     status = models.addOrder(data)
@@ -92,13 +90,14 @@ def addOrder():
             'message':'Order placed successfully , Track with below order id',
             'order_id':'1XE3'
         }
+    conn.close()
     return jsonify(response , 200)
 
 
 
 
 if __name__=="__main__":
-    app.run(host='0.0.0.0' , port=5000)
+    app.run(host='0.0.0.0' , port=8000)
 
 
 

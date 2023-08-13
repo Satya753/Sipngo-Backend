@@ -1,0 +1,15 @@
+INSERT INTO `category`(`id`, `name`, `active`, `imagePath`) VALUES ('13','Milk Shakes','1','static/milkshakes.jpg');
+INSERT INTO `category`(`id`, `name`, `active`, `imagePath`) VALUES ('14','Thick shake','1','static/milkshakes.jpg');
+INSERT INTO `category`(`id`, `name`, `active`, `imagePath`) VALUES ('15','Detox juices','1','static/milkshakes.jpg');
+INSERT INTO `category`(`id`, `name`, `active`, `imagePath`) VALUES ('16','Bowls and sandwiches','1','static/milkshakes.jpg');
+INSERT INTO `category`(`id`, `name`, `active`, `imagePath`) VALUES ('17','Hot beverages','1','static/milkshakes.jpg');
+INSERT INTO `category`(`id`, `name`, `active`, `imagePath`) VALUES ('18','Ice cream','1','static/milkshakes.jpg');
+INSERT INTO `category`(`id`, `name`, `active`, `imagePath`) VALUES ('19','Combo','1','static/milkshakes.jpg');
+INSERT INTO `category`(`id`, `name`, `active`, `imagePath`) VALUES ('20','Add on','1','static/milkshakes.jpg');
+INSERT INTO `category`(`id`, `name`, `active`, `imagePath`) VALUES ('21','Breakfast fast','1','static/milkshakes.jpg');
+INSERT INTO `category`(`id`, `name`, `active`, `imagePath`) VALUES ('22','Protein shake','1','static/milkshakes.jpg');
+INSERT INTO `category`(`id`, `name`, `active`, `imagePath`) VALUES ('24','Combo','1','static/milkshakes.jpg');
+INSERT INTO `category`(`id`, `name`, `active`, `imagePath`) VALUES ('25','Customized','1','static/milkshakes.jpg');
+INSERT INTO `category`(`id`, `name`, `active`, `imagePath`) VALUES ('26','Burger','1','static/milkshakes.jpg');
+INSERT INTO `category`(`id`, `name`, `active`, `imagePath`) VALUES ('27','Parcel','1','static/milkshakes.jpg');
+INSERT INTO `category`(`id`, `name`, `active`, `imagePath`) VALUES ('28','Subscription','1','static/milkshakes.jpg');
