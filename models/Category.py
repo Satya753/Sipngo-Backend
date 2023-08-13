@@ -28,6 +28,6 @@ class Category:
         self.name = name
 
     def setActive(self):
-        sefl.active = active
+        self.active = active
 
 

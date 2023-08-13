@@ -4,6 +4,7 @@ import mysql.connector
 import sys
 from flask_cors import CORS
 sys.path.append('models/')
+from AuthModel import UserAuth
 sys.path.append('Utils/')
 from Category import Category
 from Models import Model
@@ -94,10 +95,24 @@ def addOrder():
     return jsonify(response , 200)
 
 
+@app.route("/home/signUp" , methods = ['POST'])
+def addNewUser():
+    conn = getNewConnection(connection_pool)
+    data = request.json
+    userauth = UserAuth(conn)
+    status = userauth.insertNewUser(data)
+    response = {
+            'message' : 'User  added succesfull'
+            }
+    conn.close()
+
+    return jsonify(response , 200)
+
+
 
 
 if __name__=="__main__":
-    app.run(host='0.0.0.0' , port=8000)
+    app.run(host='0.0.0.0' , port=5000)
 
 
 
