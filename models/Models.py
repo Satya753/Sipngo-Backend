@@ -8,6 +8,7 @@ from Category import Category
 from Item import Item
 import time
 from GenerateOrderId import GenerateOrderId
+from datetime import datetime
 
 class Model:
     def __init__(self , db):
@@ -19,15 +20,29 @@ class Model:
         rows = cursor.fetchall()
 
         category = []
-        print(rows)
         for row in rows:
             item = Category(row[0] , row[1] , row[2] , row[3])
-            print(item)
             category.append(item)
 
 
         return category 
 
+    def getSubscriptionPerUser(self , user_id):
+        cursor = self.db.cursor()
+        print(user_id)
+        cursor.execute("""select * from subscription_tracker as s , day_tracker as d where s.sub_id = d.sub_id and d.user_id = '%s'"""%(user_id))
+        dayrows = cursor.fetchall()
+
+        return dayrows
+
+
+    def getSubscriptionOrderDetail(self , user_id):
+        cursor = self.db.cursor()
+        cursor.execute("""select * from subscription_tracker as s , order_detail as d where s.sub_id= d.sub_id and d.user_id = '%s'"""%(user_id))
+
+        orderrows = cursor.fetchall()
+        
+        return orderrows
 
     def getItems(self , category_id):
         cursor = self.db.cursor()
@@ -47,19 +62,43 @@ class Model:
         user_id = order_details["user_id"]
         items = order_details["orders"]
         slot = order_details["slot"]
-        days = order_details["days"]
+        days = len(order_details["days"])
 
         current_timestamp = int(time.time())
         genOrder = GenerateOrderId(user_id ,str(current_timestamp)) 
         order_id = genOrder.getOrderId()
 
-        query = 'INSERT INTO order_detail (order_id, user_id , item_id ,cnt , amount , slot , days) VALUES (%s , %s ,%s , %s , %s , %s , %s)'
+        query = 'INSERT INTO order_detail (sub_id, user_id , item_id ,cnt , amount , slot , days) VALUES (%s , %s ,%s , %s , %s , %s , %s)'
 
         for (id , cnt , amount) in items:
             values = (order_id , user_id , id , cnt , amount , slot , days)
             cursor.execute(query , values)
             self.db.commit()
             print(id , amount)
+
+
+        # Insert subscription details to table so to display it to the user
+
+        subscription_query = 'INSERT INTO subscription_tracker (user_id , sub_id , rem_days , order_placed , total_amount , status) VALUES (%s, %s, %s, %s , %s , %s)'
+
+        sub_values = (user_id , order_id , days , datetime.now() , order_details["total_amount"], "Not Approved")
+        cursor.execute(subscription_query , sub_values)
+        self.db.commit()
+
+
+        # Start inserting days for every user to keep track of each and every day
+
+        day_query = 'INSERT INTO day_tracker (location , sub_id , user_id , STATUS , order_date ) VALUES (%s , %s , %s , %s , %s)'
+
+        for day in order_details["days"]:
+            location = "Delhi"
+#            date_string = day.replace('(India Standard Time)', '').rstrip()
+#            date = datetime.strptime(date_string, '%a %b %d %Y %H:%M:%S %Z%z').strftime("%Y-%m-%d %H:%M:%S")
+            values = (location, order_id , user_id ,"Not-Delivered" ,day) 
+            print(values)
+            cursor.execute(day_query , values)
+            self.db.commit()
+            print(values)
         print(order_id)
 
 

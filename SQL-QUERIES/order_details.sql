@@ -8,3 +8,5 @@ CREATE TABLE order_detail(
 );
 
 ALTER TABLE order_detail ADD days INT;
+ ALTER TABLE order_detail MODIFY order_id VARCHAR(256);
+ ALTER TABLE order_detail RENAME COLUMN order_id TO sub_id;

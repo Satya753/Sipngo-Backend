@@ -11,7 +11,9 @@ from Models import Model
 from ImageProcessing import ByteImage 
 from dotenv import load_dotenv
 from mysql.connector import pooling
+import logging
 load_dotenv()
+#logging.basicConfig(filename='record.log', level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
 app = Flask(__name__)
 CORS(app)
@@ -32,7 +34,7 @@ app.config['MYSQL_USER'] = os.getenv("DB_USER")
 app.config['MYSQL_PASS'] = os.getenv("DB_PASSWORD")
 app.config['MYSQL_DB'] = os.getenv("DB_NAME") 
 app.config['MYSQL_POOL_NAME'] = 'mysql_pool'
-app.config['MYSQL_POOL_SIZE'] = 5
+app.config['MYSQL_POOL_SIZE'] =32 
 app.config['MYSQL_AUTOCOMMIT'] = True
 
 #db = MySQLPool(app)
@@ -56,8 +58,6 @@ def fetchCategories():
         byteimg = ByteImage(data.image)
         item.append([data.getName() , data.getId() , byteimg.getBase64()])
     conn.close()
-
-    print(item)
 
     return item
 
@@ -109,6 +109,15 @@ def addNewUser():
     return jsonify(response , 200)
 
 
+@app.route("/home/subscription" , methods = ['GET'])
+def getSubscriptionDetails():
+    conn = getNewConnection(connection_pool)
+    models = Model(conn)
+    user_id = request.args.get('user_id') 
+    sub_details = models.getSubscriptionPerUser(user_id)
+    order_details = models.getSubscriptionOrderDetail(user_id)
+
+    return [sub_details , order_details]
 
 
 if __name__=="__main__":
