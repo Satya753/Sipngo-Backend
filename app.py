@@ -116,6 +116,7 @@ def getSubscriptionDetails():
     user_id = request.args.get('user_id') 
     sub_details = models.getSubscriptionPerUser(user_id)
     order_details = models.getSubscriptionOrderDetail(user_id)
+    conn.close()
 
     return [sub_details , order_details]
 
