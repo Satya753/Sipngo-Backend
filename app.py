@@ -115,10 +115,10 @@ def getSubscriptionDetails():
     models = Model(conn)
     user_id = request.args.get('user_id') 
     sub_details = models.getSubscriptionPerUser(user_id)
-    order_details = models.getSubscriptionOrderDetail(user_id)
+    #order_details = models.getSubscriptionOrderDetail(user_id)
     conn.close()
 
-    return [sub_details , order_details]
+    return sub_details
 
 
 if __name__=="__main__":

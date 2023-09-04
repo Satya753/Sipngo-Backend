@@ -26,23 +26,47 @@ class Model:
 
 
         return category 
+    
+    def getDaysPerUser(self , sub_id , user_id):
+        values = (sub_id , user_id)
+        daysQuery = """ select * from day_tracker as d where d.sub_id=%s and d.user_id=%s"""
+        cursor = self.db.cursor()
+        cursor.execute(daysQuery , values)
+        days = cursor.fetchall()
+
+        daysDict = []
+        for day in days:
+            daysDict.append({"sub_id":day[1] , "order_date":day[3] , "status":day[4]})
+        return daysDict
 
     def getSubscriptionPerUser(self , user_id):
         cursor = self.db.cursor()
         print(user_id)
-        cursor.execute("""select * from subscription_tracker as s , day_tracker as d where s.sub_id = d.sub_id and d.user_id = '%s'"""%(user_id))
-        dayrows = cursor.fetchall()
+        subIdQuery = """select s.sub_id from subscription_tracker as s where s.status = %s and s.user_id=%s"""
+        values  = ("Not Approved" , user_id)
+        cursor.execute(subIdQuery , values)
+        sub_id = cursor.fetchall()
+        print(sub_id[0][0])
+        values = (sub_id[0][0] , user_id)
 
-        return dayrows
 
+        #print(dayrows)
+        return self.getDaysPerUser(sub_id[0][0] , user_id)
 
     def getSubscriptionOrderDetail(self , user_id):
         cursor = self.db.cursor()
         cursor.execute("""select * from subscription_tracker as s , order_detail as d where s.sub_id= d.sub_id and d.user_id = '%s'"""%(user_id))
 
-        orderrows = cursor.fetchall()
+        rows = cursor.fetchall()
+        print(rows)
+        subscriptions  = []
+        for row in rows:
+            subscription = {"rem_days":row[2] , "status":row[3] , "order_placed":row[4] , "status":row[5]}
+            subscriptions.append({row[1]:subscription})
+        return subscriptions
+
+
         
-        return orderrows
 
     def getItems(self , category_id):
         cursor = self.db.cursor()
