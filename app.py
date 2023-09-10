@@ -56,7 +56,8 @@ def fetchCategories():
         if data.image==None:
             data.image = 'static/items/download.jpeg'
         byteimg = ByteImage(data.image)
-        item.append([data.getName() , data.getId() , byteimg.getBase64()])
+        # Change
+        item.append({'name':data.getName() , 'id':data.getId() , 'img':byteimg.getBase64()})
     conn.close()
 
     return item
@@ -71,7 +72,8 @@ def fetchItems():
 
     for item in items:
         byteimg = ByteImage(item.image_path)
-        res.append([item.price , item.name ,byteimg.getBase64() , item.id])
+        res.append({'price':item.price , 'name':item.name , 'img':byteimg.getBase64() , 'id':item.id})
+        #res.append([item.price , item.name ,byteimg.getBase64() , item.id])
 
     conn.close()
 
