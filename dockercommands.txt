@@ -1,4 +1,4 @@
 sudo docker pull satya753/sipngo-mysql:v1
 sudo docker pull  satya753/sipngo-backend2.3:v1
-[in a separate terminal] sudo docker run  -p 3307:3306 --name sipngo-msyql-container sipngo-mysql
-[in a seperate terminal]sudo docker run --network="host" -p 5000:5000  --name sipngo-container sipngo-backend2.3
+[in a separate terminal] sudo docker run  -p 3307:3306 --name sipngo-msyql-container  satya753/sipngo-mysql:v1
+[in a seperate terminal]sudo docker run --network="host" -p 5000:5000  --name sipngo-container   satya753/sipngo-backend2.3:v1
