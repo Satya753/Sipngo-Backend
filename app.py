@@ -122,6 +122,14 @@ def getSubscriptionDetails():
 
     return sub_details
 
+@app.route("/home/userLocation" , methods = ['POST'])
+def userLocation():
+    conn  = getNewConnection(connection_pool)
+    models = Model(conn)
+    status = models.addUserLocation(request.json)
+
+    return status
+
 
 if __name__=="__main__":
     app.run(host='0.0.0.0' , port=5000)

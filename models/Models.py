@@ -9,6 +9,7 @@ from Item import Item
 import time
 from GenerateOrderId import GenerateOrderId
 from datetime import datetime
+import json
 
 class Model:
     def __init__(self , db):
@@ -80,6 +81,17 @@ class Model:
             items.append(item)
 
         return items
+    def addUserLocation(self , user_location):
+        cursor = self.db.cursor()
+        values = (json.dumps(user_location['coords']) , user_location['user_id'])
+
+        query = """UPDATE user_details SET user_location=%s WHERE user_id=%s"""
+        print(values)
+
+        cursor.execute(query , values)
+        self.db.commit()
+
+        return "Update successfully"
 
     def addOrder(self , order_details):
         cursor = self.db.cursor()
