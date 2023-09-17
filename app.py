@@ -87,11 +87,12 @@ def addOrder():
     models = Model(conn)
     # Insert data into table 
     print(data)
-    status = models.addOrder(data)
+    order_id = models.addOrder(data)
+    print(order_id)
 
     response  = {
             'message':'Order placed successfully , Track with below order id',
-            'order_id':'1XE3'
+            'order_id':order_id
         }
     conn.close()
     return jsonify(response , 200)
