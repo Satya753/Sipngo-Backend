@@ -78,5 +78,8 @@ CREATE TABLE `user_details` (
   PRIMARY KEY (`user_id`)
 ); 
 
+CREATE TABLE UPI_TRANSACTIONS(transactionId VARCHAR(64) PRIMARY KEY, user_id VARCHAR(64) , date_of_transaction DATETIME , STATUS VARCHAR(64));
+
+ALTER TABLE user_details ADD phone_no VARCHAR(64);
 
 

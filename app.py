@@ -1,10 +1,13 @@
 import os
+import json
 from flask import Flask ,  render_template , request ,jsonify, url_for , redirect
 import mysql.connector
 import sys
 from flask_cors import CORS
+sys.path.append('service/')
 sys.path.append('models/')
 from AuthModel import UserAuth
+from PhonePe import PhonePe
 sys.path.append('Utils/')
 from Category import Category
 from Models import Model
@@ -130,6 +133,20 @@ def userLocation():
     status = models.addUserLocation(request.json)
 
     return status
+
+@app.route("/home/payment" , methods= ['POST'])
+def paymentTransaction():
+    transactionDetail = request.json
+    phonepe= PhonePe()
+    response = phonepe.payRequest(request.json)
+    if response['success']==True:
+        conn = getNewConnection(connection_pool)
+        models = Model(conn)
+        data = {'user_id':request.json["user_id"] , 'id':response['data']['merchantTransactionId']}
+        models.initiateTransaction(data)
+        return response
+    else:
+        return response
 
 
 if __name__=="__main__":

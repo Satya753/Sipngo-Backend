@@ -14,9 +14,9 @@ class UserAuth:
 
     def insertNewUser(self , userInfo):
         cursor = self.db.cursor()
-        query = 'INSERT INTO user_details (user_id , user_name , user_email , user_location) VALUES (%s  , %s , %s , %s)'
+        query = 'INSERT INTO user_details (user_id , user_name , user_email , user_location , phone_no) VALUES (%s  , %s , %s , %s , %s)'
 
-        values = (userInfo['user_id'] , userInfo['user_name'] , userInfo['user_email'] , userInfo['user_location'])
+        values = (userInfo['user_id'] , userInfo['user_name'] , userInfo['user_email'] , userInfo['user_location'] , userInfo['phone_no'])
 
 
         try:

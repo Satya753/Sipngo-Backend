@@ -2,6 +2,7 @@ import os
 from flask import Flask , render_template , request , url_for , redirect
 import mysql.connector
 import sys
+import datetime
 sys.path.append('models/')
 sys.path.append('../Utils/')
 from Category import Category
@@ -162,8 +163,16 @@ class Model:
         except Exception as e:
             return e
         print(order_id)
-        
         return order_id
+    def initiateTransaction(self , transactionDetail):
+        query = 'INSERT INTO UPI_TRANSACTIONS (transactionId , user_id , date_of_transaction , STATUS) VALUES (%s , %s , %s , %s)'
+        values = (transactionDetail['id'] , transactionDetail['user_id'] , datetime.now() , 'INITIATED')
+        try:
+            cursor = self.db.cursor()
+            cursor.execute(query , values)
+            self.db.commit()
+        except Exception as e:
+            return e
 
 
 
