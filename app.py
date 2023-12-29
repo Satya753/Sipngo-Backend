@@ -32,7 +32,7 @@ connection_pool = pooling.MySQLConnectionPool(host = os.getenv("DB_HOST"),
         )
 
 app.config['MYSQL_HOST'] = os.getenv("DB_HOST")
-app.config['MYSQL_PORT'] = 3306
+app.config['MYSQL_PORT'] = 3307
 app.config['MYSQL_USER'] = os.getenv("DB_USER")
 app.config['MYSQL_PASS'] = os.getenv("DB_PASSWORD")
 app.config['MYSQL_DB'] = os.getenv("DB_NAME") 
@@ -147,6 +147,17 @@ def paymentTransaction():
         return response
     else:
         return response
+
+
+@app.route("/home/paymentStatus" , methods = ['GET'])
+
+def checkUPIPayStatus():
+    phonepe = PhonePe()
+    response = phonepe.checkPayStatus(request.args.get('id'))
+    conn = getNewConnection(connection_pool)
+    models = Model(conn)
+    models.updateTransactionStatus(request.args.get('id') , response['code'])
+    return response
 
 
 if __name__=="__main__":

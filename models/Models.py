@@ -173,7 +173,20 @@ class Model:
             self.db.commit()
         except Exception as e:
             return e
+    def updateTransactionStatus(self , transactionId , status):
+        query = """UPDATE UPI_TRANSACTIONS  SET STATUS=%s WHERE transactionId=%s"""
+        values  = (status , transactionId)
+        print(values)
+        try:
+            cursor = self.db.cursor()
+            rowcount = cursor.execute(query , values)
+            print(rowcount)
+            self.db.commit()
+        except Exception as e:
+            print(e)
+            return e
 
 
 
+#UPDATE UPI_TRANSACTIONS  SET STATUS='99726f32cc5547468ec9391d82a819fb' WHERE transactionId='ERROR';
 

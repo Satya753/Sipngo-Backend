@@ -12,4 +12,4 @@ RUN pip install mysql-connector
 EXPOSE 5000
 EXPOSE 3307
 
-CMD ["python" , "app.py"]
+CMD ["python" , "app1.py"]
